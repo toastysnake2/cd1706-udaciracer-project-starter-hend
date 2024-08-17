@@ -219,14 +219,7 @@ function renderRacerCars(racers) {
 
 function renderRacerCard(racer) {
 	const { id, driver_name, top_speed, acceleration, handling } = racer
-	return `
-		<li class="card podracer" id="${id}">
-			<h3>${driver_name}</h3>
-			<p>${`Top Speed: ${top_speed}`}</p>
-			<p>${`Acceleration: ${acceleration}`}</p>
-			<p>${`Handling: ${handling}`}</p>
-		</li>
-	`
+	return `<h4 class="card racer" id="${id}">${driver_name}</h3>`
 }
 
 function renderTrackCards(tracks) {
@@ -258,7 +251,7 @@ function renderCountdown(count) {
 	`
 }
 
-function renderRaceStartView(track) {
+function renderRaceStartView(track, racers) {
 	return `
 		<header>
 			<h1>Race: ${track.name}</h1>
@@ -279,28 +272,16 @@ function renderRaceStartView(track) {
 }
 
 function resultsView(positions) {
-	userPlayer.driver_name += " (you)"
-	let count = 1
-  
-	const results = positions.map(p => {
-		return `
-			<tr>
-				<td>
-					<h3>${count++} - ${p.driver_name}</h3>
-				</td>
-			</tr>
-		`
-	})
-
+	positions.sort((a, b) => (a.final_position > b.final_position) ? 1 : -1);
+	const first = positions.filter(player => player.final_position === 1);
+	
 	return `
-		<header>
-			<h1>Race Results</h1>
+		<header class="header-wrap">
+			<h1>${first[0].driver_name} wins!</h1>
 		</header>
-		<main>
-			<h3>Race Results</h3>
-			<p>The race is done! Here are the final results:</p>
-			${results.join('')}
-			<a href="/race">Start a new race</a>
+		<main class="wrapper-results">
+			${raceProgress(positions)}
+			<a class="start-button" href="/race">Start a new race</a>
 		</main>
 	`
 }
@@ -369,7 +350,7 @@ async function getTracks() {
 
 async function getRacers() {
 	try {
-		const response = await  fetch(`${SERVER}/api/cars`); 		
+		const response = await fetch(`${SERVER}/api/cars`); 		
 		const data = await response.json();
 		return data;
 	}

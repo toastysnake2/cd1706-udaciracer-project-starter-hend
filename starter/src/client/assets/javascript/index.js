@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
 async function onPageLoad() {
 	console.log("Getting form info for dropdowns!")
 	try {
-		getTracks()
+		await getTracks()
 			.then(tracks => {
 				const html = renderTrackCards(tracks)
 				renderAt('#tracks', html)
@@ -113,7 +113,7 @@ async function handleCreateRace() {
 	console.log("RACE: ", race)
 }
 
-function runRace(raceID) {
+async function runRace(raceID) {
 	try {
 	return new Promise(resolve => {
 			const raceInterval = setInterval(async () => {
@@ -188,10 +188,10 @@ function handleSelectTrack(target) {
 	store.track_id = parseInt(target.id);
 }
 
-function handleAccelerate() {
+async function handleAccelerate() {
 	console.log("accelerate button clicked")
 	try {
-		accelerate(store.race_id);
+		await accelerate(store.race_id);
 	} catch(err) {
 		console.log(`handleAccelerate error::`, err.message);
 		console.error(err);
@@ -221,7 +221,7 @@ function renderRacerCard(racer) {
 	const { id, driver_name, top_speed, acceleration, handling } = racer
 	return `
 		<li class="card podracer" id="${id}">
-			<h3>${customRacerName[driver_name]}</h3>
+			<h3>${driver_name}</h3>
 			<p>${`Top Speed: ${top_speed}`}</p>
 			<p>${`Acceleration: ${acceleration}`}</p>
 			<p>${`Handling: ${handling}`}</p>
@@ -246,7 +246,7 @@ function renderTrackCards(tracks) {
 }
 
 function renderTrackCard(track) {
-	const { id, name } = track
+	const { id, name, segments } = track
 
 	return `<h4 id="${id}" class="card track">${name}</h4>`
 }
@@ -354,11 +354,11 @@ function defaultFetchOpts() {
 
 // TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
 
-function getTracks() {
+async function getTracks() {
 	console.log(`calling server :: ${SERVER}/api/tracks`)
 	try {
-		const response = fetch(`${SERVER}/api/tracks`); 
-		const data = response.json(); 
+		const response = await fetch(`${SERVER}/api/tracks`); 
+		const data = await response.json(); 
 		return data; 
 	}
 	catch (err) {
@@ -367,10 +367,10 @@ function getTracks() {
 	}
 }
 
-function getRacers() {
+async function getRacers() {
 	try {
-		const response =  fetch(`${SERVER}/api/cars`); 		
-		const data = response.json();
+		const response = await  fetch(`${SERVER}/api/cars`); 		
+		const data = await response.json();
 		return data;
 	}
 	catch (err) {
@@ -379,25 +379,30 @@ function getRacers() {
 	}
 }
 
-function createRace(player_id, track_id) {
-	player_id = parseInt(player_id)
-	track_id = parseInt(track_id)
-	const body = { player_id, track_id }
-	
-	return fetch(`${SERVER}/api/races`, {
-		method: 'POST',
-		...defaultFetchOpts(),
-		dataType: 'jsonp',
-		body: JSON.stringify(body)
-	})
-	.then(res => res.json())
-	.catch(err => console.log("Problem with createRace request::", err))
+async function createRace(player_id, track_id) {
+	try {
+		player_id = parseInt(player_id)
+		track_id = parseInt(track_id)
+		const body = { player_id, track_id }
+		
+		const response = await fetch(`${SERVER}/api/races`, {
+			method: 'POST',
+			...defaultFetchOpts(),
+			dataType: 'jsonp',
+			body: JSON.stringify(body)
+		})
+		const data = await response.json();
+		return data;
+	} catch (err) {
+		console.log("createRace request error::", err)
+		console.error(err)
+	}
 }
 
-function getRace(id) {
+async function getRace(id) {
 	try {
-		const response = fetch(`${SERVER}/api/races/${id}`);
-		const data = response.json();
+		const response = await fetch(`${SERVER}/api/races/${id}`);
+		const data = await response.json();
 		return data;
 	}
 	catch (err) {
@@ -406,17 +411,17 @@ function getRace(id) {
 	}
 }
 
-function startRace(id) {
-	return fetch(`${SERVER}/api/races/${id}/start`, {
+async function startRace(id) {
+	return await fetch(`${SERVER}/api/races/${id}/start`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.then(res => res.json())
+	// .then(res => res.json())
 	.catch(err => console.log("Problem with getRace request::", err))
 }
 
-function accelerate(id) {
-	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
+async function accelerate(id) {
+	return await fetch(`${SERVER}/api/races/${id}/accelerate`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})

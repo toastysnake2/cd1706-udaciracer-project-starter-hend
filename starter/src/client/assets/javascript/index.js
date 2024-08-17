@@ -219,9 +219,14 @@ function renderRacerCars(racers) {
 
 function renderRacerCard(racer) {
 	const { id, driver_name, top_speed, acceleration, handling } = racer
-	// OPTIONAL: There is more data given about the race cars than we use in the game, if you want to factor in top speed, acceleration, 
-	// and handling to the various vehicles, it is already provided by the API!
-	return `<h4 class="card racer" id="${id}">${driver_name}</h3>`
+	return `
+		<li class="card podracer" id="${id}">
+			<h3>${customRacerName[driver_name]}</h3>
+			<p>${`Top Speed: ${top_speed}`}</p>
+			<p>${`Acceleration: ${acceleration}`}</p>
+			<p>${`Handling: ${handling}`}</p>
+		</li>
+	`
 }
 
 function renderTrackCards(tracks) {
@@ -352,8 +357,8 @@ function defaultFetchOpts() {
 function getTracks() {
 	console.log(`calling server :: ${SERVER}/api/tracks`)
 	try {
-		const response = await fetch(`${SERVER}/api/tracks`); 
-		const data = await response.json(); 
+		const response = fetch(`${SERVER}/api/tracks`); 
+		const data = response.json(); 
 		return data; 
 	}
 	catch (err) {
@@ -364,8 +369,8 @@ function getTracks() {
 
 function getRacers() {
 	try {
-		const response =  await fetch(`${SERVER}/api/cars`); 		
-		const data = await response.json();
+		const response =  fetch(`${SERVER}/api/cars`); 		
+		const data = response.json();
 		return data;
 	}
 	catch (err) {
@@ -391,8 +396,8 @@ function createRace(player_id, track_id) {
 
 function getRace(id) {
 	try {
-		const response = await fetch(`${SERVER}/api/races/${id}`);
-		const data = await response.json();
+		const response = fetch(`${SERVER}/api/races/${id}`);
+		const data = response.json();
 		return data;
 	}
 	catch (err) {
@@ -411,7 +416,7 @@ function startRace(id) {
 }
 
 function accelerate(id) {
-	return await fetch(`${SERVER}/api/races/${id}/accelerate`, {
+	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})

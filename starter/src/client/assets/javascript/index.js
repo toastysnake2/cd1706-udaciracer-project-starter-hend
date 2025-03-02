@@ -428,4 +428,4 @@ function accelerate(id) {
 	.then((response) => response.json())
 	.catch((error) => console.log(error));
 }
-//resources used: mdn doc, w3schools,freeCodecamp
+//resources used: mdn doc, w3schools(for code examples and explanations on things like setInterval and fetch)

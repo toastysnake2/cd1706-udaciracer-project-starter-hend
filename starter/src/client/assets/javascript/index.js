@@ -366,7 +366,9 @@ function getTracks() {
 	// TODO: Fetch tracks
 	// TIP: Don't forget a catch statement!
 	return fetch(`${SERVER}/api/tracks`)
-	.then((response) => response.json())
+	.then((response) => response.json(),{
+		method: "GET"
+	})
 	.catch((error) => console.log(error));
 }
 
@@ -375,7 +377,9 @@ function getRacers() {
 
 	// TODO: Fetch racers
 	// TIP: Do a file search for "TODO" to make sure you find all the things you need to do! There are even some vscode plugins that will highlight todos for you
-	return fetch(`${SERVER}/api/cars`)
+	return fetch(`${SERVER}/api/cars`,{
+		method: "GET"
+	})
 	.then((response) => response.json())
 	.catch((error) => console.log(error));
 }
@@ -397,7 +401,9 @@ function createRace(player_id, track_id) {
 
 function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
-	return fetch(`${SERVER}/api/races/${id}`)
+	return fetch(`${SERVER}/api/races/${id}`,{
+		method: "GET"
+	})
 	.then((response) => response.json())
 	.catch((error) => console.log(error));
 }

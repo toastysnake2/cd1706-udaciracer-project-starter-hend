@@ -143,7 +143,7 @@ function runRace(raceID) {
 		resolve(res)
 		}}
 		catch(error){
-			console.log(error)
+			console.error("Error:", error)
 		} 
 	}, 500)
 	})
@@ -365,11 +365,11 @@ function getTracks() {
 
 	// TODO: Fetch tracks
 	// TIP: Don't forget a catch statement!
-	return fetch(`${SERVER}/api/tracks`)
-	.then((response) => response.json(),{
+	return fetch(`${SERVER}/api/tracks`,{
 		method: "GET"
 	})
-	.catch((error) => console.log(error));
+	.then(res => res.json())
+	.catch((err) => console.log(err));
 }
 
 function getRacers() {
@@ -380,8 +380,8 @@ function getRacers() {
 	return fetch(`${SERVER}/api/cars`,{
 		method: "GET"
 	})
-	.then((response) => response.json())
-	.catch((error) => console.log(error));
+	.then(res => res.json())
+	.catch((err) => console.log(err));
 }
 
 function createRace(player_id, track_id) {
@@ -404,8 +404,8 @@ function getRace(id) {
 	return fetch(`${SERVER}/api/races/${id}`,{
 		method: "GET"
 	})
-	.then((response) => response.json())
-	.catch((error) => console.log(error));
+	.then(res => res.json())
+	.catch((err) => console.log(err));
 }
 
 function startRace(id) {
@@ -413,8 +413,8 @@ function startRace(id) {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.then((res) => res)
-	.catch(error => console.log(error))
+	.then(res => res.json())
+	.catch(err => console.log(err))
 }
 
 function accelerate(id) {
@@ -425,6 +425,5 @@ function accelerate(id) {
 		method: "POST",
 		...defaultFetchOpts(),
 	})
-	.then((response) => response.json())
-	.catch((error) => console.log(error));
+	.catch((err) => console.log(err));
 }

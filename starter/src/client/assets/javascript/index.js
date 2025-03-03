@@ -368,7 +368,7 @@ function getTracks() {
 	return fetch(`${SERVER}/api/tracks`,{
 		method: "GET"
 	})
-	.then(res => res.json())
+	.then((res) => res.json())
 	.catch((err) => console.log(err));
 }
 
@@ -380,7 +380,7 @@ function getRacers() {
 	return fetch(`${SERVER}/api/cars`,{
 		method: "GET"
 	})
-	.then(res => res.json())
+	.then((res) => res.json())
 	.catch((err) => console.log(err));
 }
 
@@ -404,7 +404,7 @@ function getRace(id) {
 	return fetch(`${SERVER}/api/races/${id}`,{
 		method: "GET"
 	})
-	.then(res => res.json())
+	.then((res) => res.json())
 	.catch((err) => console.log(err));
 }
 
@@ -413,7 +413,7 @@ function startRace(id) {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.then(res => res.json())
+	.then((res) => res)
 	.catch(err => console.log(err))
 }
 

@@ -413,7 +413,7 @@ function startRace(id) {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
-	.then((res) => res)
+	// .then((res) => res.json())
 	.catch(err => console.log(err))
 }
 
